@@ -53,6 +53,8 @@ namespace Megatech.Gilbarco.Console
         public PumpController(string portName) { 
             _port = new SerialPort();
             _port.BaudRate = 5787;
+            _port.Parity = Parity.Even;
+            _port.StopBits = StopBits.One;
             _port.PortName = portName;
             _port.DataReceived += _port_DataReceived;
             _port.ErrorReceived += _port_ErrorReceived;
