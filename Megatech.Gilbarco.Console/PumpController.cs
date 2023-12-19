@@ -153,9 +153,9 @@ namespace Megatech.Gilbarco.Console
 
                 PumpTransactionData data = new PumpTransactionData();
                 data.PumpId = _lastCommand.PumpId;
-                data.UnitPrice = GetValue(bytes, 0xF7, 6, 0);
-                data.Volume = GetValue(bytes, 0xF9, 8, 3);
-                data.Money = GetValue(bytes, 0xFA, 8, 0);
+                data.UnitPrice = GetValueFromCode(bytes, 0xF7, 6, 0);
+                data.Volume = GetValueFromCode(bytes, 0xF9, 8, 3);
+                data.Money = GetValueFromCode(bytes, 0xFA, 8, 0);
 
                 OnPumpTransactionDataReceived(data);
 
@@ -170,8 +170,8 @@ namespace Megatech.Gilbarco.Console
                 PumpTotalData data = new PumpTotalData();
                 data.PumpId = _lastCommand.PumpId;
                 data.UnitPrice = GetValueFromCode(bytes, 0xF4, 6, 0);
-                data.Volume = GetValueFromCode(bytes, 0xF9, 8, 3);
-                data.Money = GetValueFromCode(bytes, 0xFA, 8, 0);
+                data.Volume = GetValueFromCode(bytes, 0xF9,     12, 2);
+                data.Money = GetValueFromCode(bytes, 0xFA, 12, 0);
 
                 OnPumpTotalDataReceived(data);
 
@@ -294,12 +294,14 @@ namespace Megatech.Gilbarco.Console
         private void QueueCommand(PumpCommand command)
         {
             _commands.Enqueue(command);
+            if (!processing) ProcessQueue();
         }
 
         private void ProcessQueue()
         {
             if (_commands.Count > 0)
             {
+                processing = true;
                 if (_lastSent >= DateTime.Now.AddMicroseconds(-100))
                 {
                     Thread.Sleep(100);
@@ -308,11 +310,13 @@ namespace Megatech.Gilbarco.Console
                 PumpCommand command = _commands.Dequeue();
                 SendCommand(command);
 
+                if (_commands.Count == 0) processing = false;
             }
         }
 
         Queue<PumpCommand> _commands = new Queue<PumpCommand>();
 
+        private bool processing = false;
         private void SendCommand(PumpCommand command)
         {
             if (_port.IsOpen)
@@ -323,9 +327,9 @@ namespace Megatech.Gilbarco.Console
                 _port.ReceivedBytesThreshold = command.ReveidBytesThreshold;
                 _port.Write(command.CommandData, 0, command.CommandData.Length);
                 OnDataSent(command.CommandData);
-                Thread.Sleep(100);
+                Thread.Sleep(200);
                 bool stop = !_lastCommand.HasStartStop;
-                while (_port.BytesToRead>0 && !stop)
+                while (_port.BytesToRead>0 )
                 {
                     byte[] bytes = new byte[_port.BytesToRead];
                     _port.Read(bytes, 0, _port.BytesToRead);

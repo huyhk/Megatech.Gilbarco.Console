@@ -139,7 +139,7 @@ namespace Megatech.Gilbarco.Console
                 }
                 if (status == PUMP_STATUS.OFF || status == PUMP_STATUS.POET || status == PUMP_STATUS.FEOT)
                 {
-                    //controller.GetTotal(pumpId);
+                    controller.GetTotal(pumpId);
                     controller.GetLastTransaction(pumpId);
                 }
 
@@ -148,7 +148,7 @@ namespace Megatech.Gilbarco.Console
             }));
 
 
-            timer.Start();
+            //timer.Start();
 
         }
 
