@@ -21,7 +21,25 @@ namespace Megatech.Gilbarco.Console
         {
             InitializeComponent();
             LoadCOMPorts();
-            timer.Enabled = false;
+            timer.Interval = 200;
+            timer.Tick += Timer_Tick;
+           
+        }
+
+        private void Timer_Tick(object? sender, EventArgs e)
+        {
+            UpdatePumpStatus();
+        }
+
+        private void UpdatePumpStatus()
+        {
+
+            timer.Stop();
+
+            foreach (var item in lstPump)
+            {
+                controller.RequestStatus(item.Id);
+            }
         }
 
         private void LoadCOMPorts()
@@ -129,6 +147,9 @@ namespace Megatech.Gilbarco.Console
                 dataGridView1.Refresh();
             }));
 
+
+            timer.Start();
+
         }
 
 
@@ -146,11 +167,11 @@ namespace Megatech.Gilbarco.Console
             {
                 controller.RequestStatus(i);
             }
+
         }
 
 
 
-        StringBuilder sentSB = new StringBuilder();
 
 
 
