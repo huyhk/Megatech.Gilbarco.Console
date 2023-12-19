@@ -177,6 +177,7 @@ namespace Megatech.Gilbarco.Console
         {
             if (!loop)
             {
+                loop = true;
                 timer.Start();
                 btnLoop.Text = "Stop";
             }
