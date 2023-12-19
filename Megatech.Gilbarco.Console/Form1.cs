@@ -1,5 +1,6 @@
 
 using System;
+using System.ComponentModel;
 using System.IO.Ports;
 using System.Text;
 using System.Transactions;
@@ -49,16 +50,23 @@ namespace Megatech.Gilbarco.Console
 
         private void Controller_DataSent(string data)
         {
-            txtSentData.Text += data + "\n\r";
-            txtSentData.SelectionStart = txtOutput.TextLength;
-            txtSentData.ScrollToCaret();
+            this.Invoke((MethodInvoker)(() =>
+            {
+                txtSentData.Text += data + "\r\n";
+                txtSentData.SelectionStart = txtOutput.TextLength;
+                txtSentData.ScrollToCaret();
+            }));
         }
 
         private void Controller_DataReceived(string data)
         {
-            txtOutput.Text += data + "\n\r";
-            txtOutput.SelectionStart = txtOutput.TextLength;
-            txtOutput.ScrollToCaret();
+            this.Invoke((MethodInvoker)(() =>
+            {
+                txtOutput.Text += data + "\r\n";
+                txtOutput.SelectionStart = txtOutput.TextLength;
+                txtOutput.ScrollToCaret();
+            }));
+
         }
 
         private void Controller_TransactionDataReceived(byte pumpId, PumpTransactionData data)
@@ -74,20 +82,30 @@ namespace Megatech.Gilbarco.Console
         private void Controller_StatusReceived(byte pumpId, PUMP_STATUS status)
         {
             if (lstPump == null)
-                lstPump = new List<Pump>();
-            if (lstPump.Exists(p => p.Id == pumpId))
             {
-                lstPump.FirstOrDefault(p => p.Id == pumpId).Status = status;
+                lstPump = new BindingList<Pump>();
+
             }
-            else lstPump.Add(new Pump { Id = pumpId, Status = status });
-            dataGridView1.DataSource = lstPump;
-            dataGridView1.Update();
+            this.Invoke((MethodInvoker)(() =>
+            {
+                dataGridView1.DataSource = lstPump;
+                if (lstPump.FirstOrDefault(p => p.Id == pumpId) != null)
+                {
+                    lstPump.FirstOrDefault(p => p.Id == pumpId).Status = status;
+                }
+                else lstPump.Add(new Pump { Id = pumpId, Status = status });
+
+
+                dataGridView1.Update();
+                dataGridView1.Refresh();
+            }));
+
         }
 
 
-        private List<Pump> lstPump;
+        private BindingList<Pump> lstPump;
 
-       
+
 
 
         private int pumpId;
@@ -97,11 +115,11 @@ namespace Megatech.Gilbarco.Console
 
             for (byte i = 1; i < 16; i++)
             {
-                controller.RequestStatus(i );
+                controller.RequestStatus(i);
             }
         }
 
-      
+
 
         StringBuilder sentSB = new StringBuilder();
 

@@ -28,9 +28,9 @@ namespace Megatech.Gilbarco.Console
         private PumpTransactionDataReceivedHandler _transactionDataReceived;
 
         private PumpTotalDataReceivedHandler _totalDataReceived;
-        public event  PumpStatusReceivedHandler StatusReceived
+        public event PumpStatusReceivedHandler StatusReceived
         {
-            add {  _statusReceived +=value; }
+            add { _statusReceived += value; }
             remove { _statusReceived -= value; }
         }
 
@@ -40,7 +40,8 @@ namespace Megatech.Gilbarco.Console
             remove { _transactionDataReceived -= value; }
         }
 
-        public event PumpTotalDataReceivedHandler TotalDataReceived {
+        public event PumpTotalDataReceivedHandler TotalDataReceived
+        {
             add { _totalDataReceived += value; }
             remove { _totalDataReceived -= value; }
         }
@@ -48,9 +49,12 @@ namespace Megatech.Gilbarco.Console
         public event DataReceivedEventHandler DataReceived;
         public event DataSentEventHandler DataSent;
 
+
+        private System.Timers.Timer timer;
         public PumpController() : this("COM1")
         { }
-        public PumpController(string portName) { 
+        public PumpController(string portName)
+        {
             _port = new SerialPort();
             _port.BaudRate = 5787;
             _port.Parity = Parity.Even;
@@ -58,12 +62,24 @@ namespace Megatech.Gilbarco.Console
             _port.PortName = portName;
             _port.DataReceived += _port_DataReceived;
             _port.ErrorReceived += _port_ErrorReceived;
-            
+
+            timer = new System.Timers.Timer();
+            timer.Interval = 500;
+            timer.Elapsed += Timer_Elapsed;
+            timer.Start();
+
+
+        }
+
+        private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            ProcessQueue();
         }
 
         public bool Open()
         {
-            try {
+            try
+            {
                 _port.Open();
                 return _port.IsOpen;
             }
@@ -75,15 +91,17 @@ namespace Megatech.Gilbarco.Console
         }
         private void _port_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
         {
-           
+            var t = e.EventType;
+
         }
+
 
         private void _port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             byte[] bytes = new byte[_port.BytesToRead];
-            OnDataReceived(bytes);
             _port.Read(bytes, 0, _port.BytesToRead);
-            
+
+
             switch (_lastCommand.CommandCode)
             {
                 case COMMAND_CODE.COMMAND_STATUS:
@@ -101,6 +119,7 @@ namespace Megatech.Gilbarco.Console
                     break;
             }
 
+            OnDataReceived(bytes);
         }
 
         private void OnDataReceived(byte[] bytes)
@@ -108,6 +127,7 @@ namespace Megatech.Gilbarco.Console
 
             if (DataReceived != null)
                 DataReceived(Convert.ToHexString(bytes));
+
         }
         private void OnDataSent(byte[] bytes)
         {
@@ -118,7 +138,8 @@ namespace Megatech.Gilbarco.Console
 
         private void ProcessTransactionData(byte[] bytes)
         {
-            if (ValidData(bytes)) {
+            if (ValidData(bytes))
+            {
 
                 PumpTransactionData data = new PumpTransactionData();
                 data.PumpId = _lastCommand.PumpId;
@@ -127,7 +148,7 @@ namespace Megatech.Gilbarco.Console
                 data.Money = GetValue(bytes, 0xFA, 8, 0);
 
                 OnPumpTransactionDataReceived(data);
-                
+
             }
         }
 
@@ -187,7 +208,7 @@ namespace Megatech.Gilbarco.Console
             if (first)
                 return (byte)((b & 0xF0) >> 4);
             else
-                return (byte)(b & 0x0F) ;
+                return (byte)(b & 0x0F);
         }
 
         private bool ValidData(byte[] bytes)
@@ -211,11 +232,11 @@ namespace Megatech.Gilbarco.Console
         {
             if (status == PUMP_STATUS.CALL)
                 Authorizre(pumpId);
-            if (_statusReceived!=null)
+            if (_statusReceived != null)
             {
                 _statusReceived.Invoke(pumpId, status);
             }
-            
+
         }
 
         public void RequestStatus(byte pumpId)
@@ -233,7 +254,7 @@ namespace Megatech.Gilbarco.Console
         public void GetLastTransaction(byte pumpId)
         {
             QueueCommand(PumpCommand.Transaction(pumpId));
-           
+
         }
 
 
@@ -258,19 +279,23 @@ namespace Megatech.Gilbarco.Console
 
         private PumpCommand _lastCommand;
         private DateTime _lastSent;
-        private void QueueCommand(PumpCommand command )
+        private void QueueCommand(PumpCommand command)
         {
             _commands.Enqueue(command);
-            ProcessQueue();
         }
 
         private void ProcessQueue()
         {
             if (_commands.Count > 0)
             {
+                if (_lastSent >= DateTime.Now.AddMicroseconds(-100))
+                {
+                    Thread.Sleep(100);
+                }
+
                 PumpCommand command = _commands.Dequeue();
                 SendCommand(command);
-                
+
             }
         }
 
@@ -280,16 +305,14 @@ namespace Megatech.Gilbarco.Console
         {
             if (_port.IsOpen)
             {
-                if (_lastSent >= DateTime.Now.AddMicroseconds(-100))
-                {
-                    Thread.Sleep(100);
-                }
+
                 _lastSent = DateTime.Now;
                 _lastCommand = command;
                 _port.Write(command.CommandData, 0, command.CommandData.Length);
                 OnDataSent(command.CommandData);
+                Thread.Sleep(200);
             }
-            ProcessQueue();
+
         }
     }
 }
