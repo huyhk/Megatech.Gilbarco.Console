@@ -34,6 +34,8 @@ namespace Megatech.Gilbarco.Console
         private void btnConnect_Click(object sender, EventArgs e)
         {
             var portName = cboComPortList.SelectedItem as string;
+            if (controller !=null)
+                controller.Close();
 
             controller = new PumpController(portName);
             controller.StatusReceived += Controller_StatusReceived;
