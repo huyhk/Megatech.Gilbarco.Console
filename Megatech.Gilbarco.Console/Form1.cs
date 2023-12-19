@@ -58,6 +58,7 @@ namespace Megatech.Gilbarco.Console
             controller.StatusReceived += Controller_StatusReceived;
             controller.TotalDataReceived += Controller_TotalDataReceived;
             controller.TransactionDataReceived += Controller_TransactionDataReceived;
+            controller.RealTimeMoneyReceived += Controller_RealTimeMoneyReceived;
             controller.DataReceived += Controller_DataReceived;
             controller.DataSent += Controller_DataSent; ;
 
@@ -66,6 +67,19 @@ namespace Megatech.Gilbarco.Console
 
             DetectPumpList();
 
+        }
+
+        private void Controller_RealTimeMoneyReceived(byte pumpId, decimal data)
+        {
+            this.Invoke((MethodInvoker)(() =>
+            {
+                var pump = lstPump.FirstOrDefault(p => p.Id == pumpId);
+                if (pump != null)
+                {
+                    pump.RealTimeMoney = data;
+                }
+                dataGridView1.Update();
+            }));
         }
 
         private void Controller_DataSent(string data)
@@ -137,7 +151,10 @@ namespace Megatech.Gilbarco.Console
                     controller.GetTotal(pumpId);
                     controller.GetLastTransaction(pumpId);
                 }
-
+                else if (status == PUMP_STATUS.BUSY)
+                {
+                    //controller.GetRealTimeMoney(pumpId);
+                }
                 dataGridView1.Update();
                 dataGridView1.Refresh();
             }));

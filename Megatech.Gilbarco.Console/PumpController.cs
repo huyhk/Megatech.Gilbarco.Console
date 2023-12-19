@@ -18,6 +18,7 @@ namespace Megatech.Gilbarco.Console
         public delegate void PumpStatusReceivedHandler(byte pumpId, PUMP_STATUS status);
         public delegate void PumpTransactionDataReceivedHandler(byte pumpId, PumpTransactionData data);
         public delegate void PumpTotalDataReceivedHandler(byte pumpId, PumpTotalData data);
+        public delegate void PumpRealTimeMoneyReceivedHandler(byte pumpId, decimal data);
         public delegate void DataSentEventHandler(string data);
 
         public delegate void DataReceivedEventHandler(string data);
@@ -48,7 +49,7 @@ namespace Megatech.Gilbarco.Console
 
         public event DataReceivedEventHandler DataReceived;
         public event DataSentEventHandler DataSent;
-
+        public event PumpRealTimeMoneyReceivedHandler RealTimeMoneyReceived;
 
         private System.Timers.Timer timer;
         public PumpController() : this("COM1")
@@ -356,6 +357,8 @@ namespace Megatech.Gilbarco.Console
                                 ProcessTotalData(bytes);
                                 break;
                             case COMMAND_CODE.COMMAND_REALTIME_MONEY:
+                                ProcessRealtimeMoney(bytes);
+                                break;
                             default:
                                 break;
                         }
@@ -367,6 +370,19 @@ namespace Megatech.Gilbarco.Console
                 ProcessQueue();
             }
 
+        }
+
+        private void ProcessRealtimeMoney(byte[] bytes)
+        {
+            decimal val = GetValue(bytes, 0, bytes.Length, 0);
+
+            OnPumpRealtimeMoneyReceived(val);
+        }
+
+        private void OnPumpRealtimeMoneyReceived(decimal val)
+        {
+            if (RealTimeMoneyReceived!=null)
+                RealTimeMoneyReceived.Invoke(_lastCommand.PumpId, val);
         }
     }
 }

@@ -35,10 +35,12 @@
             statusStrip1 = new StatusStrip();
             statusBarLabel = new ToolStripStatusLabel();
             dataGridView1 = new DataGridView();
+            btnLoop = new Button();
             colName = new DataGridViewTextBoxColumn();
             Status = new DataGridViewTextBoxColumn();
-            Action = new DataGridViewButtonColumn();
-            btnLoop = new Button();
+            RealTimeMoney = new DataGridViewTextBoxColumn();
+            LastTransaction = new DataGridViewTextBoxColumn();
+            Total = new DataGridViewTextBoxColumn();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -97,7 +99,7 @@
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colName, Status, Action });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colName, Status, RealTimeMoney, LastTransaction, Total });
             dataGridView1.Dock = DockStyle.Bottom;
             dataGridView1.Location = new Point(0, 66);
             dataGridView1.Name = "dataGridView1";
@@ -105,6 +107,16 @@
             dataGridView1.RowTemplate.Height = 29;
             dataGridView1.Size = new Size(902, 590);
             dataGridView1.TabIndex = 7;
+            // 
+            // btnLoop
+            // 
+            btnLoop.Location = new Point(472, 11);
+            btnLoop.Name = "btnLoop";
+            btnLoop.Size = new Size(94, 29);
+            btnLoop.TabIndex = 8;
+            btnLoop.Text = "Loop";
+            btnLoop.UseVisualStyleBackColor = true;
+            btnLoop.Click += btnLoop_Click;
             // 
             // colName
             // 
@@ -122,22 +134,29 @@
             Status.Name = "Status";
             Status.Width = 125;
             // 
-            // Action
+            // RealTimeMoney
             // 
-            Action.HeaderText = "";
-            Action.MinimumWidth = 6;
-            Action.Name = "Action";
-            Action.Width = 125;
+            RealTimeMoney.DataPropertyName = "RealTimeMoney";
+            RealTimeMoney.HeaderText = "RealTimeMoney";
+            RealTimeMoney.MinimumWidth = 6;
+            RealTimeMoney.Name = "RealTimeMoney";
+            RealTimeMoney.Width = 125;
             // 
-            // btnLoop
+            // LastTransaction
             // 
-            btnLoop.Location = new Point(472, 11);
-            btnLoop.Name = "btnLoop";
-            btnLoop.Size = new Size(94, 29);
-            btnLoop.TabIndex = 8;
-            btnLoop.Text = "Loop";
-            btnLoop.UseVisualStyleBackColor = true;
-            btnLoop.Click += btnLoop_Click;
+            LastTransaction.DataPropertyName = "LastTransaction";
+            LastTransaction.HeaderText = "Last Transaction";
+            LastTransaction.MinimumWidth = 6;
+            LastTransaction.Name = "LastTransaction";
+            LastTransaction.Width = 360;
+            // 
+            // Total
+            // 
+            Total.DataPropertyName = "PumpTotal";
+            Total.HeaderText = "Total";
+            Total.MinimumWidth = 6;
+            Total.Name = "Total";
+            Total.Width = 360;
             // 
             // Form1
             // 
@@ -170,9 +189,11 @@
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel statusBarLabel;
         private DataGridView dataGridView1;
+        private Button btnLoop;
         private DataGridViewTextBoxColumn colName;
         private DataGridViewTextBoxColumn Status;
-        private DataGridViewButtonColumn Action;
-        private Button btnLoop;
+        private DataGridViewTextBoxColumn RealTimeMoney;
+        private DataGridViewTextBoxColumn LastTransaction;
+        private DataGridViewTextBoxColumn Total;
     }
 }
