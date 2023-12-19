@@ -324,12 +324,12 @@ namespace Megatech.Gilbarco.Console
                 _port.Write(command.CommandData, 0, command.CommandData.Length);
                 OnDataSent(command.CommandData);
                 Thread.Sleep(100);
-
-                while (_port.BytesToRead>0)
+                bool stop = !_lastCommand.HasStartStop;
+                while (_port.BytesToRead>0 && !stop)
                 {
                     byte[] bytes = new byte[_port.BytesToRead];
                     _port.Read(bytes, 0, _port.BytesToRead);
-                    bool stop = true;
+                    
                     _data.AddRange(bytes);
                     if (_lastCommand.HasStartStop)
                     {
