@@ -86,7 +86,7 @@ namespace Megatech.Gilbarco.Console
         {
             this.Invoke((MethodInvoker)(() =>
             {
-                
+
             }));
         }
 
@@ -94,7 +94,7 @@ namespace Megatech.Gilbarco.Console
         {
             this.Invoke((MethodInvoker)(() =>
             {
-                
+
             }));
 
         }
