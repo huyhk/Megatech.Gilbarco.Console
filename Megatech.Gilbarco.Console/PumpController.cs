@@ -60,13 +60,13 @@ namespace Megatech.Gilbarco.Console
             _port.Parity = Parity.Even;
             _port.StopBits = StopBits.One;
             _port.PortName = portName;
-            _port.DataReceived += _port_DataReceived;
-            _port.ErrorReceived += _port_ErrorReceived;
+            //_port.DataReceived += _port_DataReceived;
+            //_port.ErrorReceived += _port_ErrorReceived;
 
-            timer = new System.Timers.Timer();
-            timer.Interval = 500;
-            timer.Elapsed += Timer_Elapsed;
-            timer.Start();
+            //timer = new System.Timers.Timer();
+            //timer.Interval = 500;
+            //timer.Elapsed += Timer_Elapsed;
+            //timer.Start();
 
 
         }
@@ -323,7 +323,44 @@ namespace Megatech.Gilbarco.Console
                 _port.ReceivedBytesThreshold = command.ReveidBytesThreshold;
                 _port.Write(command.CommandData, 0, command.CommandData.Length);
                 OnDataSent(command.CommandData);
-                Thread.Sleep(200);
+                Thread.Sleep(100);
+
+                while (_port.BytesToRead>0)
+                {
+                    byte[] bytes = new byte[_port.BytesToRead];
+                    _port.Read(bytes, 0, _port.BytesToRead);
+                    bool stop = true;
+                    _data.AddRange(bytes);
+                    if (_lastCommand.HasStartStop)
+                    {
+                        stop = bytes.Contains(ETX);
+                    }
+                    if (stop)
+                    {
+                        bytes = _data.ToArray();
+                        _data.Clear();
+                        switch (_lastCommand.CommandCode)
+                        {
+                            case COMMAND_CODE.COMMAND_STATUS:
+                                ProcessStatusData(bytes); break;
+
+                            case COMMAND_CODE.COMMAND_AUTHORIZE:
+                            case COMMAND_CODE.COMMAND_PUMP_TRANSACTION:
+                                ProcessTransactionData(bytes);
+                                break;
+                            case COMMAND_CODE.COMMAND_PUMP_TOTAL:
+                                ProcessTotalData(bytes);
+                                break;
+                            case COMMAND_CODE.COMMAND_REALTIME_MONEY:
+                            default:
+                                break;
+                        }
+
+                        OnDataReceived(bytes);
+                    }
+                }
+
+                ProcessQueue();
             }
 
         }
