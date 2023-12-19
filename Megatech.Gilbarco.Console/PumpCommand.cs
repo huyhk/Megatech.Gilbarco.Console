@@ -10,7 +10,7 @@ namespace Megatech.Gilbarco.Console
     {
        
 
-        public PumpCommand(byte code, byte pumpId)
+        public PumpCommand(byte code, byte pumpId, int threshold = 0)
         {
 
             PumpId = pumpId;
@@ -18,6 +18,7 @@ namespace Megatech.Gilbarco.Console
             CommandCode = code;
 
             CommandData = new byte[] { (byte)(code & 0xFF | pumpId) };
+            ReveidBytesThreshold = threshold;
 
         }
 
@@ -25,19 +26,19 @@ namespace Megatech.Gilbarco.Console
         public byte CommandCode { get; set; }
         public byte[] CommandData { get; set; }
 
+        public int ReveidBytesThreshold { get; set; }
 
-
-        public static PumpCommand GetCommand( byte code, byte pumpId)
+        public static PumpCommand GetCommand( byte code, byte pumpId, int threshold = 0)
         {
            
-            return new PumpCommand(code, pumpId);
+            return new PumpCommand(code, pumpId, threshold);
         }
 
 
 
         public static PumpCommand GetPumpStatus(byte pumpId)
         {
-            return GetCommand(COMMAND_CODE.COMMAND_STATUS , pumpId) ;
+            return GetCommand(COMMAND_CODE.COMMAND_STATUS , pumpId,1) ;
         }
 
 
@@ -54,11 +55,11 @@ namespace Megatech.Gilbarco.Console
 
         public static PumpCommand PumpTotal(byte pumpId)
         {
-            return GetCommand(COMMAND_CODE.COMMAND_PUMP_TOTAL, pumpId);
+            return GetCommand(COMMAND_CODE.COMMAND_PUMP_TOTAL, pumpId,88);
         }
         public static PumpCommand Transaction(byte pumpId)
         {
-            return GetCommand(COMMAND_CODE.COMMAND_PUMP_TRANSACTION, pumpId);
+            return GetCommand(COMMAND_CODE.COMMAND_PUMP_TRANSACTION, pumpId,32);
         }
 
         

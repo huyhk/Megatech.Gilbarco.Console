@@ -308,6 +308,7 @@ namespace Megatech.Gilbarco.Console
 
                 _lastSent = DateTime.Now;
                 _lastCommand = command;
+                _port.ReceivedBytesThreshold = command.ReveidBytesThreshold;
                 _port.Write(command.CommandData, 0, command.CommandData.Length);
                 OnDataSent(command.CommandData);
                 Thread.Sleep(200);
