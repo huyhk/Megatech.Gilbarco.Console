@@ -23,7 +23,7 @@ namespace Megatech.Gilbarco.Console
             HasStartStop = hasStartStop;
         }
 
-        public  byte PumpId { get; set; }
+        public byte PumpId { get; set; }
         public byte CommandCode { get; set; }
         public byte[] CommandData { get; set; }
 
@@ -31,17 +31,17 @@ namespace Megatech.Gilbarco.Console
 
         public bool HasStartStop { get; set; }
 
-        public static PumpCommand GetCommand( byte code, byte pumpId, int threshold = 0)
+        public static PumpCommand GetCommand(byte code, byte pumpId, int threshold = 0, bool hasStartStop = false)
         {
-           
-            return new PumpCommand(code, pumpId, threshold);
+
+            return new PumpCommand(code, pumpId, threshold, hasStartStop);
         }
 
 
 
         public static PumpCommand GetPumpStatus(byte pumpId)
         {
-            return GetCommand(COMMAND_CODE.COMMAND_STATUS , pumpId,1) ;
+            return GetCommand(COMMAND_CODE.COMMAND_STATUS, pumpId, 1);
         }
 
 
@@ -51,20 +51,20 @@ namespace Megatech.Gilbarco.Console
             return GetCommand(COMMAND_CODE.COMMAND_STOP, pumpId);
         }
 
-        public static PumpCommand Authorize (byte pumpId)
+        public static PumpCommand Authorize(byte pumpId)
         {
             return GetCommand(COMMAND_CODE.COMMAND_AUTHORIZE, pumpId);
         }
 
         public static PumpCommand PumpTotal(byte pumpId)
         {
-            return GetCommand(COMMAND_CODE.COMMAND_PUMP_TOTAL, pumpId,88);
+            return GetCommand(COMMAND_CODE.COMMAND_PUMP_TOTAL, pumpId, 44, true);
         }
         public static PumpCommand Transaction(byte pumpId)
         {
-            return GetCommand(COMMAND_CODE.COMMAND_PUMP_TRANSACTION, pumpId,32);
+            return GetCommand(COMMAND_CODE.COMMAND_PUMP_TRANSACTION, pumpId, 32, true);
         }
 
-        
+
     }
 }
