@@ -95,31 +95,42 @@ namespace Megatech.Gilbarco.Console
 
         }
 
+        private List<byte> _data = new List<byte>();
 
         private void _port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             byte[] bytes = new byte[_port.BytesToRead];
             _port.Read(bytes, 0, _port.BytesToRead);
-
-
-            switch (_lastCommand.CommandCode)
+            bool stop = true;
+            _data.AddRange(bytes);
+            if (_lastCommand.HasStartStop)
             {
-                case COMMAND_CODE.COMMAND_STATUS:
-                    ProcessStatusData(bytes); break;
+                stop = bytes.Last() == ETX;
 
-                case COMMAND_CODE.COMMAND_AUTHORIZE:
-                case COMMAND_CODE.COMMAND_PUMP_TRANSACTION:
-                    ProcessTransactionData(bytes);
-                    break;
-                case COMMAND_CODE.COMMAND_PUMP_TOTAL:
-                    ProcessTotalData(bytes);
-                    break;
-                case COMMAND_CODE.COMMAND_REALTIME_MONEY:
-                default:
-                    break;
             }
+            if (stop)
+            {
+                bytes = _data.ToArray();
+                _data.Clear();
+                switch (_lastCommand.CommandCode)
+                {
+                    case COMMAND_CODE.COMMAND_STATUS:
+                        ProcessStatusData(bytes); break;
 
-            OnDataReceived(bytes);
+                    case COMMAND_CODE.COMMAND_AUTHORIZE:
+                    case COMMAND_CODE.COMMAND_PUMP_TRANSACTION:
+                        ProcessTransactionData(bytes);
+                        break;
+                    case COMMAND_CODE.COMMAND_PUMP_TOTAL:
+                        ProcessTotalData(bytes);
+                        break;
+                    case COMMAND_CODE.COMMAND_REALTIME_MONEY:
+                    default:
+                        break;
+                }
+
+                OnDataReceived(bytes);
+            }
         }
 
         private void OnDataReceived(byte[] bytes)
