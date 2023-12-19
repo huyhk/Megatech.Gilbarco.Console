@@ -142,26 +142,25 @@
             dataGridViewCellStyle1.NullValue = "0";
             RealTimeMoney.DefaultCellStyle = dataGridViewCellStyle1;
             RealTimeMoney.HeaderText = "Real Time Money";
-            RealTimeMoney.MinimumWidth = 6;
+            RealTimeMoney.MinimumWidth = 240;
             RealTimeMoney.Name = "RealTimeMoney";
-            RealTimeMoney.Width = 125;
+            RealTimeMoney.Width = 240;
             // 
             // LastTransaction
             // 
-            LastTransaction.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
             LastTransaction.DataPropertyName = "LastTransaction";
             LastTransaction.HeaderText = "Last Transaction";
-            LastTransaction.MinimumWidth = 6;
+            LastTransaction.MinimumWidth = 480;
             LastTransaction.Name = "LastTransaction";
-            LastTransaction.Width = 131;
+            LastTransaction.Width = 480;
             // 
             // Total
             // 
             Total.DataPropertyName = "PumpTotal";
             Total.HeaderText = "Total";
-            Total.MinimumWidth = 6;
+            Total.MinimumWidth = 480;
             Total.Name = "Total";
-            Total.Width = 360;
+            Total.Width = 480;
             // 
             // Form1
             // 

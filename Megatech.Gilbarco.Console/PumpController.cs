@@ -384,5 +384,10 @@ namespace Megatech.Gilbarco.Console
             if (RealTimeMoneyReceived!=null)
                 RealTimeMoneyReceived.Invoke(_lastCommand.PumpId, val);
         }
+
+        internal void GetRealTimeMoney(byte pumpId)
+        {
+            QueueCommand(PumpCommand.RealTimeMoney(pumpId));
+        }
     }
 }

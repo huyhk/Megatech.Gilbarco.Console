@@ -153,7 +153,7 @@ namespace Megatech.Gilbarco.Console
                 }
                 else if (status == PUMP_STATUS.BUSY)
                 {
-                    //controller.GetRealTimeMoney(pumpId);
+                    controller.GetRealTimeMoney(pumpId);
                 }
                 dataGridView1.Update();
                 dataGridView1.Refresh();
