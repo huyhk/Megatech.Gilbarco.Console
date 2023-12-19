@@ -95,7 +95,7 @@ namespace Megatech.Gilbarco.Console
         {
 
 
-            for (byte i = 1; i < 1; i++)
+            for (byte i = 1; i < 16; i++)
             {
                 controller.RequestStatus(i );
             }
