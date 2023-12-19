@@ -17,7 +17,8 @@ namespace Megatech.Gilbarco.Console
 
             CommandCode = code;
 
-            CommandData = new byte[] { (byte)(code & 0xFF | pumpId) };
+            CommandData = new byte[] { (byte)((code << 4) | pumpId) };
+
             ReveidBytesThreshold = threshold;
 
         }
