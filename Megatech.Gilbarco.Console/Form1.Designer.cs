@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             cboComPortList = new ComboBox();
             label1 = new Label();
             btnConnect = new Button();
@@ -137,18 +138,22 @@
             // RealTimeMoney
             // 
             RealTimeMoney.DataPropertyName = "RealTimeMoney";
-            RealTimeMoney.HeaderText = "RealTimeMoney";
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = "0";
+            RealTimeMoney.DefaultCellStyle = dataGridViewCellStyle1;
+            RealTimeMoney.HeaderText = "Real Time Money";
             RealTimeMoney.MinimumWidth = 6;
             RealTimeMoney.Name = "RealTimeMoney";
             RealTimeMoney.Width = 125;
             // 
             // LastTransaction
             // 
+            LastTransaction.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
             LastTransaction.DataPropertyName = "LastTransaction";
             LastTransaction.HeaderText = "Last Transaction";
             LastTransaction.MinimumWidth = 6;
             LastTransaction.Name = "LastTransaction";
-            LastTransaction.Width = 360;
+            LastTransaction.Width = 131;
             // 
             // Total
             // 
