@@ -117,10 +117,13 @@ namespace Megatech.Gilbarco.Console
                 { 
                     pump = new Pump { Id = pumpId, Status = status };
                     lstPump.Add(pump);
-                    controller.GetTotal(pumpId);
+                    
+                }
+                if (status == PUMP_STATUS.OFF || status == PUMP_STATUS.POET || status == PUMP_STATUS.FEOT)
+                {
+                    //controller.GetTotal(pumpId);
                     controller.GetLastTransaction(pumpId);
                 }
-
 
                 dataGridView1.Update();
                 dataGridView1.Refresh();

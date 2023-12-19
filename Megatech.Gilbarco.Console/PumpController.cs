@@ -169,9 +169,9 @@ namespace Megatech.Gilbarco.Console
 
                 PumpTotalData data = new PumpTotalData();
                 data.PumpId = _lastCommand.PumpId;
-                data.UnitPrice = GetValue(bytes, 0xF4, 6, 0);
-                data.Volume = GetValue(bytes, 0xF9, 8, 3);
-                data.Money = GetValue(bytes, 0xFA, 8, 0);
+                data.UnitPrice = GetValueFromCode(bytes, 0xF4, 6, 0);
+                data.Volume = GetValueFromCode(bytes, 0xF9, 8, 3);
+                data.Money = GetValueFromCode(bytes, 0xFA, 8, 0);
 
                 OnPumpTotalDataReceived(data);
 
@@ -190,13 +190,13 @@ namespace Megatech.Gilbarco.Console
                 _transactionDataReceived.Invoke(data.PumpId, data);
         }
 
-        private decimal GetValue(byte[] bytes, byte code, int numOfBytes, int decimalPos)
+        private decimal GetValueFromCode(byte[] bytes, byte code, int numOfBytes, int decimalPos)
         {
             var idx = Array.IndexOf(bytes, code);
             if (idx > 0)
             {
                 var f = idx + numOfBytes;
-                return GetValue(bytes, idx, f, decimalPos);
+                return GetValue(bytes, idx+1, f+1, decimalPos);
             }
             else
                 return 0;
@@ -205,12 +205,14 @@ namespace Megatech.Gilbarco.Console
         {
             var c = 0;
             var val = 0.0M;
-            for (int i = start; i < end; i++)
+            for (int i = end-1; i >=start ; i--)
             {
-                val += val * 10 + GetNible(bytes[start], false);
-                if (c < decimalPos) val = val * 0.1M;
+                var x = GetNible(bytes[i], false);
+                val = (val * 10 + x);
+                
 
             }
+            val = val /(decimal)Math.Pow(10 , decimalPos);
             return val;
         }
         private byte GetNible(byte b, bool first)

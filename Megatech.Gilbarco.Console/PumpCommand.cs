@@ -10,7 +10,7 @@ namespace Megatech.Gilbarco.Console
     {
 
 
-        public PumpCommand(byte code, byte pumpId, int threshold = 0, bool hasStartStop = false)
+        public PumpCommand(byte code, byte pumpId, int threshold = 1, bool hasStartStop = false)
         {
 
             PumpId = pumpId;
@@ -31,7 +31,7 @@ namespace Megatech.Gilbarco.Console
 
         public bool HasStartStop { get; set; }
 
-        public static PumpCommand GetCommand(byte code, byte pumpId, int threshold = 0, bool hasStartStop = false)
+        public static PumpCommand GetCommand(byte code, byte pumpId, int threshold = 1, bool hasStartStop = false)
         {
 
             return new PumpCommand(code, pumpId, threshold, hasStartStop);
