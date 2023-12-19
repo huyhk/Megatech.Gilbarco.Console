@@ -72,9 +72,7 @@ namespace Megatech.Gilbarco.Console
         {
             this.Invoke((MethodInvoker)(() =>
             {
-                txtSentData.Text += data + "\r\n";
-                txtSentData.SelectionStart = txtOutput.TextLength;
-                txtSentData.ScrollToCaret();
+                
             }));
         }
 
@@ -82,9 +80,7 @@ namespace Megatech.Gilbarco.Console
         {
             this.Invoke((MethodInvoker)(() =>
             {
-                txtOutput.Text += data + "\r\n";
-                txtOutput.SelectionStart = txtOutput.TextLength;
-                txtOutput.ScrollToCaret();
+                
             }));
 
         }
