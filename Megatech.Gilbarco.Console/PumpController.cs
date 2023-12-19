@@ -105,7 +105,7 @@ namespace Megatech.Gilbarco.Console
             _data.AddRange(bytes);
             if (_lastCommand.HasStartStop)
             {
-                stop = bytes.Last() == ETX;
+                stop = bytes.Contains( ETX);
             }
             if (stop)
             {
