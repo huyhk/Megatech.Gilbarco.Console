@@ -21,9 +21,9 @@ namespace Megatech.Gilbarco.Console
         {
             InitializeComponent();
             LoadCOMPorts();
-            timer.Interval = 200;
+            timer.Interval = 1000;
             timer.Tick += Timer_Tick;
-           
+
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -34,7 +34,6 @@ namespace Megatech.Gilbarco.Console
         private void UpdatePumpStatus()
         {
 
-            timer.Stop();
 
             foreach (var item in lstPump)
             {
@@ -52,7 +51,7 @@ namespace Megatech.Gilbarco.Console
         private void btnConnect_Click(object sender, EventArgs e)
         {
             var portName = cboComPortList.SelectedItem as string;
-            if (controller !=null)
+            if (controller != null)
                 controller.Close();
 
             controller = new PumpController(portName);
@@ -132,10 +131,10 @@ namespace Megatech.Gilbarco.Console
                     pump.Status = status;
                 }
                 else
-                { 
+                {
                     pump = new Pump { Id = pumpId, Status = status };
                     lstPump.Add(pump);
-                    
+
                 }
                 if (status == PUMP_STATUS.OFF || status == PUMP_STATUS.POET || status == PUMP_STATUS.FEOT)
                 {
@@ -148,7 +147,7 @@ namespace Megatech.Gilbarco.Console
             }));
 
 
-            //timer.Start();
+            //
 
         }
 
@@ -177,7 +176,19 @@ namespace Megatech.Gilbarco.Console
 
         System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 
-
-
+        bool loop = false;
+        private void btnLoop_Click(object sender, EventArgs e)
+        {
+            if (!loop)
+            {
+                timer.Start();
+                btnLoop.Text = "Stop";
+            }
+            else
+            {
+                timer.Stop();
+                btnLoop.Text = "Loop";
+            }
+        }
     }
 }

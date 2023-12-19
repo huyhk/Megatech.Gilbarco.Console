@@ -32,16 +32,13 @@
             label1 = new Label();
             btnConnect = new Button();
             label2 = new Label();
-            txtOutput = new TextBox();
-            label3 = new Label();
-            label5 = new Label();
-            txtSentData = new TextBox();
             statusStrip1 = new StatusStrip();
             statusBarLabel = new ToolStripStatusLabel();
             dataGridView1 = new DataGridView();
             colName = new DataGridViewTextBoxColumn();
             Status = new DataGridViewTextBoxColumn();
             Action = new DataGridViewButtonColumn();
+            btnLoop = new Button();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -82,40 +79,6 @@
             label2.TabIndex = 1;
             label2.Text = "Pump List";
             // 
-            // txtOutput
-            // 
-            txtOutput.Location = new Point(460, 423);
-            txtOutput.Multiline = true;
-            txtOutput.Name = "txtOutput";
-            txtOutput.Size = new Size(293, 230);
-            txtOutput.TabIndex = 4;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(339, 423);
-            label3.Name = "label3";
-            label3.Size = new Size(108, 20);
-            label3.TabIndex = 1;
-            label3.Text = "Response Data";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(32, 426);
-            label5.Name = "label5";
-            label5.Size = new Size(74, 20);
-            label5.TabIndex = 1;
-            label5.Text = "Data Sent";
-            // 
-            // txtSentData
-            // 
-            txtSentData.Location = new Point(141, 420);
-            txtSentData.Multiline = true;
-            txtSentData.Name = "txtSentData";
-            txtSentData.Size = new Size(193, 230);
-            txtSentData.TabIndex = 4;
-            // 
             // statusStrip1
             // 
             statusStrip1.ImageScalingSize = new Size(20, 20);
@@ -135,11 +98,12 @@
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colName, Status, Action });
-            dataGridView1.Location = new Point(141, 63);
+            dataGridView1.Dock = DockStyle.Bottom;
+            dataGridView1.Location = new Point(0, 66);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
             dataGridView1.RowTemplate.Height = 29;
-            dataGridView1.Size = new Size(612, 351);
+            dataGridView1.Size = new Size(902, 590);
             dataGridView1.TabIndex = 7;
             // 
             // colName
@@ -165,23 +129,31 @@
             Action.Name = "Action";
             Action.Width = 125;
             // 
+            // btnLoop
+            // 
+            btnLoop.Location = new Point(472, 11);
+            btnLoop.Name = "btnLoop";
+            btnLoop.Size = new Size(94, 29);
+            btnLoop.TabIndex = 8;
+            btnLoop.Text = "Loop";
+            btnLoop.UseVisualStyleBackColor = true;
+            btnLoop.Click += btnLoop_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(902, 678);
+            Controls.Add(btnLoop);
             Controls.Add(dataGridView1);
             Controls.Add(statusStrip1);
-            Controls.Add(txtSentData);
-            Controls.Add(txtOutput);
             Controls.Add(btnConnect);
-            Controls.Add(label5);
-            Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(cboComPortList);
             Name = "Form1";
             Text = "Form1";
+            WindowState = FormWindowState.Maximized;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
@@ -195,15 +167,12 @@
         private Label label1;
         private Button btnConnect;
         private Label label2;
-        private TextBox txtOutput;
-        private Label label3;
-        private Label label5;
-        private TextBox txtSentData;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel statusBarLabel;
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn colName;
         private DataGridViewTextBoxColumn Status;
         private DataGridViewButtonColumn Action;
+        private Button btnLoop;
     }
 }
