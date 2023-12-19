@@ -116,6 +116,7 @@ namespace Megatech.Gilbarco.Console
                     pump = new Pump { Id = pumpId, Status = status };
                     lstPump.Add(pump);
                     controller.GetTotal(pumpId);
+                    controller.GetLastTransaction(pumpId);
                 }
 
 
