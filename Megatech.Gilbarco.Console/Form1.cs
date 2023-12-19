@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO.Ports;
 using System.Text;
 using System.Transactions;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Megatech.Gilbarco.Console
 {
@@ -71,12 +72,28 @@ namespace Megatech.Gilbarco.Console
 
         private void Controller_TransactionDataReceived(byte pumpId, PumpTransactionData data)
         {
-            throw new NotImplementedException();
+            this.Invoke((MethodInvoker)(() =>
+            {
+                var pump = lstPump.FirstOrDefault(p => p.Id == pumpId);
+                if (pump != null)
+                {
+                    pump.LastTransaction = data;
+                }
+                dataGridView1.Update();
+            }));
         }
 
         private void Controller_TotalDataReceived(byte pumpId, PumpTotalData data)
         {
-            throw new NotImplementedException();
+            this.Invoke((MethodInvoker)(() =>
+            {
+                var pump = lstPump.FirstOrDefault(p => p.Id == pumpId);
+                if (pump != null)
+                {
+                    pump.PumpTotal = data;
+                }
+                dataGridView1.Update();
+            }));
         }
 
         private void Controller_StatusReceived(byte pumpId, PUMP_STATUS status)
@@ -89,11 +106,17 @@ namespace Megatech.Gilbarco.Console
             this.Invoke((MethodInvoker)(() =>
             {
                 dataGridView1.DataSource = lstPump;
-                if (lstPump.FirstOrDefault(p => p.Id == pumpId) != null)
+                var pump = lstPump.FirstOrDefault(p => p.Id == pumpId);
+                if (pump != null)
                 {
-                    lstPump.FirstOrDefault(p => p.Id == pumpId).Status = status;
+                    pump.Status = status;
                 }
-                else lstPump.Add(new Pump { Id = pumpId, Status = status });
+                else
+                { 
+                    pump = new Pump { Id = pumpId, Status = status };
+                    lstPump.Add(pump);
+                    controller.GetTotal(pumpId);
+                }
 
 
                 dataGridView1.Update();
