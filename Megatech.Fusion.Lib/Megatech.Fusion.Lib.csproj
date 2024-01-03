@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Megatech.FuelingControl.Base\Megatech.FuelingControl.Base.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="FusionClass">
+      <HintPath>..\..\..\..\Documents\Zalo Received Files\Fusion Interface\DLL - Sept 2016\FusionClass.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
