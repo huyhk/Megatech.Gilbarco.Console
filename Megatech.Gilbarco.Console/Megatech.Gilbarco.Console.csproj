@@ -33,4 +33,10 @@
     <ProjectReference Include="..\Megatech.Fusion.Lib\Megatech.Fusion.Lib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="FusionClass">
+      <HintPath>bin\Debug\net7.0-windows\FusionClass.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <Reference Include="FusionClass">
-      <HintPath>..\..\..\..\Documents\Zalo Received Files\Fusion Interface\DLL - Sept 2016\FusionClass.dll</HintPath>
+      <HintPath>..\Megatech.Gilbarco.Console\bin\Debug\net7.0-windows\FusionClass.dll</HintPath>
     </Reference>
   </ItemGroup>
 

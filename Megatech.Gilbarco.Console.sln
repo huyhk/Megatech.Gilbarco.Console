@@ -13,6 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Megatech.Fusion.Lib", "Mega
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Megatech.FuelingControl.Base", "Megatech.FuelingControl.Base\Megatech.FuelingControl.Base.csproj", "{4ED1835E-4A6D-4F89-9081-5EF99D837637}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FunsionClass-Reference", "FunsionClass-Reference", "{5FBE3BFC-C386-4492-95D2-068E3EB67D8E}"
+	ProjectSection(SolutionItems) = preProject
+		Megatech.Gilbarco.Console\bin\Debug\net7.0-windows\FusionClass.dll = Megatech.Gilbarco.Console\bin\Debug\net7.0-windows\FusionClass.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
